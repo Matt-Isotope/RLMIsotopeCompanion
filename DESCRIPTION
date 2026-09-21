@@ -1,5 +1,5 @@
 Package: RLMIsotopeCompanion
-Title: R_LM_Isotope_Companion
+Title: R LM Isotope Companion
 Version: 0.1.0
 Authors@R:
     person(
@@ -10,7 +10,6 @@ Authors@R:
 Description: RStudio addin for querying local language models about R programming, statistics, archaeology, geochemistry, and isotope research.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Imports:
     ellmer,
     htmltools,
