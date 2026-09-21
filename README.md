@@ -97,7 +97,7 @@ Install the package by specifying its local path:
 
 ```r
 devtools::install(
-  "path/to/R-LM-Isotope-Companion",
+  "path/to/RLMIsotopeCompanion",
   upgrade = "never"
 )
 ```
@@ -106,8 +106,8 @@ On Windows, use forward slashes in the path:
 
 ```r
 devtools::install(
-  "C:/Users/your-name/Downloads/R-LM-Isotope-Companion",
-  upgrade = "never"
+  "C:/Users/your-name/Downloads/RLMIsotopeCompanion",
+  upgrade = FALSE
 )
 ```
 
