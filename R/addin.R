@@ -2,6 +2,7 @@
 #'
 #' Opens an RStudio addin for querying a local LM Studio model about R code.
 #'
+#' @return Invisibly runs the RStudio addin and returns when the gadget closes.
 #' @export
 
 R_LM_Isotope_Companion <- function() {
@@ -44,10 +45,10 @@ R_LM_Isotope_Companion <- function() {
       )
     ),
     miniUI::gadgetTitleBar(
-      "LM Studio — R Assistant",
+      "LM Studio - R Assistant",
       right = miniUI::miniTitleBarButton(
         "done",
-        "✕",
+        "x",
         primary = FALSE
       )
     ),
@@ -73,14 +74,14 @@ R_LM_Isotope_Companion <- function() {
               htmltools::div(style = "flex:1",
                   shiny::selectInput("model_sel", "Model", choices = c("Loading..." = ""), width = "100%")
               ),
-              shiny::actionButton("model_refresh", "↺", class = "btn btn-sm-sec", title = "Refresh models")
+              shiny::actionButton("model_refresh", "Refresh models", class = "btn btn-sm-sec", title = "Refresh models")
           ),
           shiny::selectInput("prompt_sel", "System prompt", choices = names(SYSTEM_PROMPTS), width = "100%")
       ),
       
       # Range 1 (always included)
       htmltools::div(class = "card",
-          htmltools::div(class = "card-label", "Range 1 — always included (filters / datasets)"),
+          htmltools::div(class = "card-label", "Range 1 - always included (filters / datasets)"),
           htmltools::div(class = "row-flex",
               htmltools::div(style = "flex:1", shiny::numericInput("r1_from", "From", value = 1,  min = 1, step = 1, width = "100%")),
               htmltools::div(style = "flex:1", shiny::numericInput("r1_to",   "To",   value = 30, min = 1, step = 1, width = "100%"))
@@ -90,8 +91,8 @@ R_LM_Isotope_Companion <- function() {
       
       # Range 2 (selection or manual)
       htmltools::div(class = "card",
-          htmltools::div(class = "card-label", "Range 2 — selected in editor or manual"),
-          shiny::actionButton("grab_sel", "⬇ Grab editor selection", class = "btn btn-sm-sec"),
+          htmltools::div(class = "card-label", "Range 2 - selected in editor or manual"),
+          shiny::actionButton("grab_sel", "Grab editor selection", class = "btn btn-sm-sec"),
           htmltools::div(id = "sel_info", style = "font-size:10px; color:#89b4fa; margin-top:3px;", "No selection grabbed yet"),
           htmltools::div(id = "token_info", style = "font-size:10px; color:#a6e3a1; margin-top:2px;", ""),
           htmltools::div(class = "row-flex", style = "margin-top:6px",
@@ -137,9 +138,9 @@ R_LM_Isotope_Companion <- function() {
       if (from > n_total || to > n_total) {
         stop(
           label,
-          ": il file contiene ",
+          ": the file contains ",
           n_total,
-          " righe. Intervallo massimo: 1–",
+          "rows. maximum interval 1-",
           n_total,
           "."
         )
@@ -263,7 +264,7 @@ R_LM_Isotope_Companion <- function() {
           session$sendInputMessage("r2_from", list(value = from_row))
           session$sendInputMessage("r2_to",   list(value = to_row))
           shinyjs::html("sel_info",
-                        paste0("Grabbed rows ", from_row, "–", to_row,
+                        paste0("Grabbed rows ", from_row, "-", to_row,
                                " (", to_row - from_row + 1, " rows)"))
           res <- calc_token_estimate(input$r1_from, input$r1_to, from_row, to_row)
           if (!is.null(res)) {
@@ -277,7 +278,7 @@ R_LM_Isotope_Companion <- function() {
       })
     })
     
-    # Token estimate — reactive function reused by observe and grab
+    # Token estimate - reactive function reused by observe and grab
     calc_token_estimate <- function(f1, t1, f2 = NA, t2 = NA) {
       if (is.null(input$file_path) ||
           !nzchar(input$file_path) ||
@@ -396,7 +397,7 @@ R_LM_Isotope_Companion <- function() {
     
     # Ask
     shiny::observeEvent(input$ask, {
-      shinyjs::html("response_box", "⏳ Processing...")
+      shinyjs::html("response_box", "Processing...")
       shinyjs::html("status_bar", "")
       
       tryCatch({
@@ -476,7 +477,7 @@ R_LM_Isotope_Companion <- function() {
         shinyjs::html(
           "response_box",
           htmltools::htmlEscape(
-            paste("❌ Error:", e$message)
+            paste("Error:", e$message)
           )
         )
       })
