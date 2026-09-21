@@ -604,20 +604,13 @@ For reproducible use, record:
 The public repository URL will be added here:
 
 ```text
-[Repository URL to be added]
+https://github.com/Matt-Isotope/RLMIsotopeCompanion
 ```
 
 ## Citation
 
 If you use this addin in a project, publication, teaching material, or analysis workflow, please cite the repository once it has been published.
 
-The following information will be added when available:
-
-- repository URL;
-- version;
-- release date;
-- DOI;
-- preferred citation format.
 
 When using the example Zenodo dataset, cite the original Zenodo record:
 
