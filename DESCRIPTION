@@ -1,0 +1,21 @@
+Package: RLMIsotopeCompanion
+Title: R_LM_Isotope_Companion
+Version: 0.1.0
+Authors@R:
+    person(
+        "Matt-Isotope",
+        email = "user@example.com",
+        role = c("aut", "cre")
+    )
+Description: RStudio addin for querying local LM Studio models about R code.
+License: MIT
+Encoding: UTF-8
+Imports:
+    ellmer,
+    httr,
+    miniUI,
+    rstudioapi,
+    shiny,
+    shinyjs
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
