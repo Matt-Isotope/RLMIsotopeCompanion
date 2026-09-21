@@ -1,0 +1,4 @@
+Name: LM Studio R Assistant
+Description: Ask LM Studio about selected R code
+Binding: R_LM_Isotope_Companion
+Interactive: true
