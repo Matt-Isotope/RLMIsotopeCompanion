@@ -1,0 +1,30 @@
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+*.Rproj
+.Rcheck/
+check/
+src/
+
+*.tar.gz
+*.zip
+
+renv/library/
+renv/staging/
+
+.DS_Store
+Thumbs.db
+
+# Local data and generated outputs
+data/
+private/
+*.csv
+*.xlsx
+*.rds
+
+# Possible secrets
+.env
+*.key
+*.pem
