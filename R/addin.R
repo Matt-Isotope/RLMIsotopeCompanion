@@ -151,7 +151,7 @@ R_LM_Isotope_Companion <- function() {
       }
       
       if (from > to) {
-        stop(label, ": From non può essere maggiore di To.")
+        stop(label, ": From cannot be greater than To.")
       }
       
       list(from = from, to = to)
