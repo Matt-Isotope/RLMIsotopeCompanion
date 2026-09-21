@@ -514,7 +514,7 @@ and contains:
 ```text
 Name: LM Studio R Assistant
 Description: Ask LM Studio about selected R code
-Binding: lm_studio_addin
+Binding: R_LM_Isotope_Companion
 Interactive: true
 ```
 
