@@ -125,7 +125,6 @@ It can also be launched from R:
 RLMIsotopeCompanion::R_LM_Isotope_Companion()
 ```
 
-> The repository name and the R package name may differ. The package name is currently `RStudioLMAddin`, but this may be changed to `RLMIsotopeCompanion in a future version.
 
 ## Package structure
 
