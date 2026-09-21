@@ -1,0 +1,5 @@
+^\.github$
+^\.Rproj\.user$
+^\.Rhistory$
+^\.RData$
+^\.Ruserdata$
