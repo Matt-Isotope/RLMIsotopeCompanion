@@ -1,10 +1,14 @@
-#' Launch the R_LM_Isotope_Companion
+#' Launch the R-LM-Isotope-Companion addin
 #'
-#' Opens an RStudio addin for querying a local LM Studio model about R code.
+#' Opens an RStudio gadget for querying a local language model served by
+#' LM Studio about R code.
 #'
-#' @return Invisibly runs the RStudio addin and returns when the gadget closes.
+#' @return This function launches an interactive RStudio gadget.
 #' @export
-
+#' @examples
+#' \dontrun{
+#' R_LM_Isotope_Companion()
+#' }
 R_LM_Isotope_Companion <- function() {
   
   SYSTEM_PROMPTS <- list(
