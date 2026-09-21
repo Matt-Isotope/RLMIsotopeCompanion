@@ -486,7 +486,7 @@ R_LM_Isotope_Companion <- function() {
   }
   
   viewer <- shiny::dialogViewer(
-    "LM Studio Addin",
+    "R_LM_Isotope_Companion",
     width = 760,
     height = 820
   )
