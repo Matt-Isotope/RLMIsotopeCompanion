@@ -26,6 +26,7 @@ jobs:
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
           needs: check
+          extra-packages: any::rcmdcheck
 
       - name: Check R package
         uses: r-lib/actions/check-r-package@v2
