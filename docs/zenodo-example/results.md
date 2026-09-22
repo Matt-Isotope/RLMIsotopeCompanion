@@ -2,7 +2,7 @@
 
 ## Test context
 
-This document reports two related tests of the R-LM-Isotope-Companion addin using a local Model 4B model in LM Studio.
+This document reports two related tests of the R-LM-Isotope-Companion addin using qwen3.5-4b-claude-4.6-opus-reasoning-openclaw model in LM Studio.
 
 The system prompt was already defined in the addin and was not modified during the study. The comparison focused on the wording of the user question.
 
@@ -40,7 +40,7 @@ This was a successful minimal test: the problem was real, the correction was val
 
 ## Zenodo script analyzed
 
-The following code was extracted from `Giaccari_et_al_Zn_Isotopes_Analysis.R` and sent to the addin as two ranges. Range 1 contained package loading, data import, conversion, and filtering. Range 2 contained the plotting code.
+The following code was extracted from https://doi.org/10.5281/zenodo.17868174 `Giaccari_et_al_Zn_Isotopes_Analysis.R` and sent to the addin as two ranges. Range 1 contained package loading, data import, conversion, and filtering. Range 2 contained the plotting code.
 
 ```r
 # Range 1
