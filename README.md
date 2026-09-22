@@ -259,7 +259,7 @@ It asks the model to focus on:
 - statistical test selection;
 - assumptions;
 - transformations;
-- missing data;
+- missing lines;
 - `ggplot2`;
 - tidyverse usage;
 - possible statistical errors;
@@ -327,9 +327,9 @@ The following settings can have a substantial effect on performance:
 
 The token estimate displayed by the addin is approximate. It is based on character length and is not an exact tokenizer count for every model.
 
-## Example data source
+## Example script source
 
-Initial testing may use data and documentation associated with the following Zenodo record:
+Initial testing may use script and documentation associated with the following Zenodo record:
 
 https://doi.org/10.5281/zenodo.17868174
 
@@ -341,7 +341,7 @@ CC BY 4.0
 
 Users should consult the original Zenodo record for the complete script description, citation requirements, authorship information, and licence conditions.
 
-The data may be used to test workflows involving:
+The script may be used to test workflows involving:
 
 - data import;
 - data cleaning;
@@ -637,4 +637,4 @@ The licences of external components must be checked separately, including:
 - documentation;
 - third-party dependencies.
 
-The Zenodo dataset used for initial testing is associated with the Creative Commons Attribution 4.0 International licence, subject to the terms of the original Zenodo record.
+The Zenodo script used for initial testing is associated with the Creative Commons Attribution 4.0 International licence, subject to the terms of the original Zenodo record.
