@@ -217,7 +217,6 @@ fetch_models <- function() {
 
   ids[nzchar(ids)]
 }
-r name=R/addin.R url=https://github.com/Matt-Isotope/RLMIsotopeCompanion/blob/main/R/addin.R#L185-L208
 refresh_models <- function() {
   tryCatch(
     {
