@@ -121,8 +121,10 @@ R_LM_Isotope_Companion <- function() {
     )
   )
   
-  server <- function(input, output, session) {
-    
+server <- function(input, output, session) {
+
+    LM_STUDIO_BASE_URL <- "http://localhost:1234/v1"
+
     chat_instance <- shiny::reactiveVal(NULL)
     
     get_valid_range <- function(from, to, n_total, label = "Range") {
@@ -157,19 +159,116 @@ R_LM_Isotope_Companion <- function() {
       list(from = from, to = to)
     }
     # Fetch models from LM Studio
-    fetch_models <- function() {
-      tryCatch({
-        res <- httr::GET("http://localhost:1234/v1/models",
-                         httr::add_headers("Authorization" = "Bearer placeholder"))
-        if (httr::status_code(res) == 200) {
-          data <- httr::content(res, as = "parsed")
-          ids <- sapply(data$data, function(m) m$id)
-          return(ids)
-        }
-      }, error = function(e) NULL)
-      return(NULL)
+fetch_models <- function() {
+  models_url <- paste0(LM_STUDIO_BASE_URL, "/models")
+
+  res <- tryCatch(
+    httr::GET(
+      models_url,
+      httr::timeout(10),
+      httr::add_headers(
+        "Authorization" = "Bearer placeholder"
+      )
+    ),
+    error = function(e) {
+      stop(
+        "Could not connect to LM Studio at ",
+        models_url,
+        ". Check that LM Studio is running and that the local server is active."
+      )
     }
-    
+  )
+
+  status <- httr::status_code(res)
+
+  if (status != 200) {
+    stop(
+      "LM Studio returned HTTP status ",
+      status,
+      " when requesting the model list."
+    )
+  }
+
+  data <- tryCatch(
+    httr::content(res, as = "parsed"),
+    error = function(e) {
+      stop("LM Studio returned an invalid response.")
+    }
+  )
+
+  if (!is.list(data) || is.null(data$data) || length(data$data) == 0) {
+    return(character(0))
+  }
+
+  ids <- vapply(
+    data$data,
+    function(model) {
+      if (is.list(model) &&
+          !is.null(model$id) &&
+          length(model$id) == 1 &&
+          is.character(model$id)) {
+        model$id
+      } else {
+        ""
+      }
+    },
+    character(1)
+  )
+
+  ids[nzchar(ids)]
+}
+r name=R/addin.R url=https://github.com/Matt-Isotope/RLMIsotopeCompanion/blob/main/R/addin.R#L185-L208
+refresh_models <- function() {
+  tryCatch(
+    {
+      models <- fetch_models()
+
+      if (length(models) == 0) {
+        shiny::updateSelectInput(
+          session,
+          "model_sel",
+          choices = character(0),
+          selected = character(0)
+        )
+
+        shinyjs::html(
+          "status_bar",
+          "No models were found. Load a model in LM Studio and try again."
+        )
+
+        return(invisible(NULL))
+      }
+
+      shiny::updateSelectInput(
+        session,
+        "model_sel",
+        choices = models,
+        selected = models[[1]]
+      )
+
+      shinyjs::html(
+        "status_bar",
+        paste(length(models), "model(s) available.")
+      )
+    },
+    error = function(e) {
+      shiny::updateSelectInput(
+        session,
+        "model_sel",
+        choices = character(0),
+        selected = character(0)
+      )
+
+      shinyjs::html(
+        "status_bar",
+        htmltools::htmlEscape(e$message)
+      )
+    }
+  )
+
+  invisible(NULL)
+}
+   
     # Load models on start
     shiny::updateSelectInput(
       session,
@@ -185,13 +284,18 @@ R_LM_Isotope_Companion <- function() {
     )
     )
     
-    shiny::observeEvent(input$model_refresh, {
-      models <- fetch_models()
-      if (!is.null(models) && length(models) > 0) {
-        shiny::updateSelectInput(session, "model_sel", choices = models, selected = input$model_sel)
-        shinyjs::html("status_bar", "Models refreshed")
-      }
-    })
+# Refresh models when the user clicks the button
+shiny::observeEvent(input$model_refresh, {
+  refresh_models()
+})
+
+# Try to load models automatically when the gadget opens
+session$onFlushed(
+  function() {
+    refresh_models()
+  },
+  once = TRUE
+)
     
     # Init chat when model or prompt changes
     create_chat <- function() {
@@ -208,7 +312,7 @@ R_LM_Isotope_Companion <- function() {
       
       ch <- ellmer::chat_openai_compatible(
         api_key = "placeholder",
-        base_url = "http://localhost:1234/v1",
+        base_url = LM_STUDIO_BASE_URL,
         model = input$model_sel,
         system_prompt = SYSTEM_PROMPTS[[input$prompt_sel]]
       )
