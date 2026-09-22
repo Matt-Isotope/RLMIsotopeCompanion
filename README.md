@@ -98,7 +98,7 @@ Install the package by specifying its local path:
 ```r
 devtools::install(
   "path/to/RLMIsotopeCompanion",
-  upgrade = "never"
+  upgrade = FALSE
 )
 ```
 
