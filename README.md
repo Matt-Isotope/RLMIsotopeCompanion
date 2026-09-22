@@ -604,8 +604,6 @@ For reproducible use, record:
 
 ## Repository
 
-The public repository URL will be added here:
-
 ```text
 https://github.com/Matt-Isotope/RLMIsotopeCompanion
 ```
