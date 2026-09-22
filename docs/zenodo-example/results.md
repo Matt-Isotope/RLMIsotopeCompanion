@@ -2,66 +2,25 @@
 
 ## Test context
 
-The test used the R script `Giaccari_et_al_Zn_Isotopes_Analysis.R` and the `Geochemistry & Isotopes` system prompt in the R-LM-Isotope-Companion addin.
+The tests used:
 
-The selected code contained duplicated package imports and a `ggplot2` plotting workflow. The results below compare different user prompts while keeping the selected code and system prompt as constant as possible.
+- the minimal R example `example_values <- c(1, 2, 3, NA); mean(example_values)`;
+- the Zenodo-associated R script `Giaccari_et_al_Zn_Isotopes_Analysis.R`;
+- the `Geochemistry & Isotopes` system prompt;
+- the local Model 4B model in LM Studio.
 
-LM Studio reported the token totals shown below. These totals are useful for comparing the tests, although the addin's own token estimate is approximate and LM Studio may include prompt context and generated output in its displayed total.
+The Zenodo test focused on a selected plotting section containing package imports, data conversion, filtering, and a `ggplot2` workflow. The source script was analyzed locally; the script itself was not modified by the addin.
 
-## Prompt comparison
+LM Studio reported the token totals below. These are useful for comparing the runs. They should not be confused with the addin's approximate token estimate, which is based on character length.
 
-| Test | User prompt | Tokens reported by LM Studio | Result |
-|---|---|---:|---|
-| 1 | `Review this selected R code and suggest only necessary changes.` | 2036 | Response was overconfident and included several unsupported recommendations. |
-| 2 | `Review this selected R code.` | 2492 | Response correctly found duplicate imports, but also discussed an unrelated `example_values` fragment. |
-| 3 | `Review this selected R code for real bugs and necessary corrections. Preserve the intended analysis.` | 2686 | Response identified a potentially real `theme_clean()` issue, but also made unsupported or incorrect claims about `ggplot()` and package imports. |
-| 4 | `Review only the selected R code. Identify only problems that are actually visible in this code. Do not invent missing code, functions, objects, packages, or file context. Do not refer to line numbers. Quote the relevant code fragment and show the corrected code. If the code is correct, say so.` | 2225 | Best overall response. It correctly identified the duplicate `ggrepel` and `rstatix` imports and was more cautious than the other responses, although it still included an unrelated `example_values` discussion. |
+## Preliminary functional test
 
-## Test 1
+### Submitted code
 
-### User prompt
-
-```text
-Review this selected R code and suggest only necessary changes.
-```
-
-### Model response
-
-```text
-Problems Found:
-
-Problem 1: Duplicate library(ggrepel) calls
-
-library(ggrepel)
-library(cowplot)
-library(ggrepel)
-library(ggplot2)
-
-Loading the same package twice is unnecessary and redundant.
-
-Problem 2: Duplicate library(rstatix) calls
-
-library(rstatix)
-...
-library(rstatix)
-
-Loading rstatix twice is unnecessary.
-
-Problem 3: Incomplete first example with no proper handling of mean() result
-
+```r
 example_values <- c(1, 2, 3, NA)
 mean(example_values)
-
-Problem 4: The model stated that mean(example_values) returns NaN and suggested adding na.rm = TRUE.
 ```
-
-### Assessment
-
-The duplicate `ggrepel` and `rstatix` imports are real and visible in the selected code. However, the `example_values` fragment was not part of the selected Zenodo script section and should not have been mentioned. The response was therefore partially correct but not fully grounded in the supplied code.
-
-The model also treated the final expression as a problem even though evaluating `mean(example_values)` is valid R code when the purpose is to demonstrate the effect of missing values. It should have separated a possible educational example from a real bug.
-
-## Test 2
 
 ### User prompt
 
@@ -69,110 +28,40 @@ The model also treated the final expression as a problem even though evaluating 
 Review this selected R code.
 ```
 
-### Model response
+### Result
 
-```text
-## Code Review Findings
+The model correctly identified that `mean(example_values)` returns `NA` when the vector contains a missing value and suggested:
 
-### Problem 1: Undefined function theme_clean()
-
-The model claimed that theme_clean() was not defined by the loaded packages and suggested replacing it with a base ggplot2 theme.
-
-### Problem 2: Inefficient pipe usage with ggplot()
-
-The model suggested passing data and aesthetics directly to ggplot() instead of using ggplot() followed by geom_point(data = ..., mapping = ...).
-
-### Problem 3: Duplicate library loads (rstatix and ggrepel)
-
-The model identified duplicate package imports.
-
-### Problem 4: Potential undefined function issue (theme_clean())
-
-The model repeated the theme_clean() claim.
+```r
+mean(example_values, na.rm = TRUE)
 ```
 
 ### Assessment
 
-The duplicate package imports are real. The `theme_clean()` warning may be valid if the selected code is executed without a package that provides that function, but the model should have stated the dependency uncertainty more carefully instead of asserting that the function was definitely undefined from the visible package list.
+This was a successful minimal test. The problem was real, the suggested correction was valid, and the correction could be verified directly in R.
 
-The `ggplot()` construction is valid. This is not a bug:
+## Zenodo script prompt comparison
 
-```r
-ggplot() +
-  geom_point(data = AbT1, mapping = aes(x = d13C, y = d66Zn))
-```
+| Test | User prompt | Tokens reported by LM Studio | Assessment |
+|---|---|---:|---|
+| 1 | `Review this selected R code and suggest only necessary changes.` | 2036 | Correctly found duplicate imports, but also discussed unrelated `example_values` context and made unnecessary recommendations. |
+| 2 | `Review this selected R code.` | 2492 | Correctly found duplicate imports, but proposed questionable changes and repeated an uncertain `theme_clean()` claim. |
+| 3 | `Review this selected R code for real bugs and necessary corrections. Preserve the intended analysis.` | 2686 | Longer response; identified a potentially relevant `theme_clean()` issue, but also treated valid `ggplot2` syntax as a problem and repeated findings. |
+| 4 | `Review only the selected R code. Identify only problems that are actually visible in this code. Do not invent missing code, functions, objects, packages, or file context. Do not refer to line numbers. Quote the relevant code fragment and show the corrected code. If the code is correct, say so.` | 2225 | Best overall result, although it still referred to unrelated `example_values` context. |
 
-Passing the data to `ggplot()` is an optional style alternative, not a necessary correction. The response also repeated the `theme_clean()` issue, which reduced its usefulness.
-
-## Test 3
-
-### User prompt
-
-```text
-Review this selected R code for real bugs and necessary corrections. Preserve the intended analysis.
-```
-
-### Token total
-
-```text
-2686 tokens
-```
-
-### Model response
-
-The response began with:
-
-```text
-## Code Review Findings
-
-### Problem 1: Undefined function theme_clean()
-
-### Problem 2: Inefficient pipe usage with ggplot()
-
-### Problem 3: Duplicate library loads (rstatix and ggrepel)
-
-### Problem 4: Potential undefined function issue (theme_clean())
-```
-
-### Assessment
-
-This prompt produced the longest response. It correctly noticed the duplicate imports and raised a potentially useful question about `theme_clean()`. However, it incorrectly described the valid `ggplot() + geom_point(data = ..., mapping = ...)` pattern as inefficient or non-intuitive and repeated the same `theme_clean()` claim twice.
-
-The phrase `Preserve the intended analysis` did not prevent the model from proposing unnecessary refactoring. It may have encouraged a broader code review rather than a narrow list of necessary corrections.
-
-## Test 4
+## Test 1: necessary changes
 
 ### User prompt
 
 ```text
-Review only the selected R code. Identify only problems that are actually visible in this code. Do not invent missing code, functions, objects, packages, or file context. Do not refer to line numbers. Quote the relevant code fragment and show the corrected code. If the code is correct, say so.
+Review this selected R code and suggest only necessary changes.
 ```
 
-### Token total
+### Response summary
 
-```text
-2225 tokens
-```
-
-### Model response
-
-The response began with:
-
-```text
-Problems Found:
-
-Problem 1: Duplicate library(ggrepel) calls
-
-Problem 2: Duplicate library(rstatix) calls
-
-Problem 3: Incomplete first example with no proper handling of mean() result
-```
-
-It correctly identified these duplicate imports:
+The model correctly identified duplicated calls to:
 
 ```r
-library(ggrepel)
-...
 library(ggrepel)
 ```
 
@@ -180,86 +69,148 @@ and:
 
 ```r
 library(rstatix)
-...
-library(rstatix)
 ```
 
-However, it also referred to:
-
-```r
-example_values <- c(1, 2, 3, NA)
-mean(example_values)
-```
-
-which was not part of the selected Zenodo script fragment.
+It also discussed `example_values`, although that code was not part of the selected Zenodo fragment.
 
 ### Assessment
 
-This was the best of the tested prompts because it was the shortest response among the more constrained tests and correctly emphasized visible problems. Nevertheless, it still failed the requirement not to invent or import unrelated context. The model should have ignored the `example_values` fragment entirely.
+The duplicate imports were real. The `example_values` discussion was not grounded in the selected code. The response also treated a possible educational expression as if it required a correction. This result was partially useful but not fully reliable.
 
-The result is therefore **mostly useful but not fully reliable**.
+## Test 2: short review prompt
+
+### User prompt
+
+```text
+Review this selected R code.
+```
+
+### Response summary
+
+The model reported:
+
+- an allegedly undefined `theme_clean()`;
+- an allegedly inefficient `ggplot()` construction;
+- duplicated `rstatix` and `ggrepel` imports;
+- the `theme_clean()` issue a second time.
+
+### Assessment
+
+The duplicate imports were real. The `ggplot2` construction below is valid syntax and does not require the proposed refactoring:
+
+```r
+ggplot() +
+  geom_point(data = AbT1, mapping = aes(x = d13C, y = d66Zn))
+```
+
+Whether `theme_clean()` is available depends on the complete package context. The model should have reported `[insufficient context]` or stated the dependency uncertainty instead of asserting that it was definitely undefined.
+
+## Test 3: preserve the intended analysis
+
+### User prompt
+
+```text
+Review this selected R code for real bugs and necessary corrections. Preserve the intended analysis.
+```
+
+### Assessment
+
+This produced the longest response. It correctly noticed duplicated imports and raised a potentially useful question about `theme_clean()`, but it proposed unnecessary refactoring of valid `ggplot2` code and repeated the same issue. The phrase `Preserve the intended analysis` did not improve factual accuracy.
+
+## Test 4: strict evidence-based prompt
+
+### User prompt
+
+```text
+Review only the selected R code. Identify only problems that are actually visible in this code. Do not invent missing code, functions, objects, packages, or file context. Do not refer to line numbers. Quote the relevant code fragment and show the corrected code. If the code is correct, say so.
+```
+
+### Assessment
+
+This was the most useful response overall. It correctly identified the duplicate `ggrepel` and `rstatix` imports and was more explicit about evidence. However, it still referred to the unrelated `example_values` fragment. The result was mostly useful but not fully reliable.
 
 ## Interpretation of the token results
 
-The lowest reported total was 2036 tokens for:
+The user question alone does not determine the total token count. The selected code, system prompt, model reasoning, generated response, and LM Studio context settings also affect the total.
+
+The shortest reported total was 2036 tokens. The strict prompt used 2225 tokens, the shortest question alone used 2492 tokens in another run, and the prompt containing `Preserve the intended analysis` used 2686 tokens. Therefore, a shorter question does not necessarily produce a shorter total response.
+
+Token count must be evaluated together with response quality. A shorter response is not automatically better if it misses a real bug, invents context, or proposes an unnecessary change.
+
+## Recommended system prompt structure
+
+The general rules should remain in the system prompt because they should apply to every request:
 
 ```text
-Review this selected R code and suggest only necessary changes.
+# R code review assistant
+
+You are an expert R programmer specializing in geochemistry, isotope analysis, archaeology, and statistical analysis.
+
+Review only the R code explicitly provided in the current message.
+Do not invent missing code, functions, objects, packages, files, datasets, or previous context.
+Do not refer to line numbers unless they are explicitly provided.
+Only report real correctness problems that are visible in the supplied code.
+Distinguish between genuine bugs, necessary corrections, and optional style or performance improvements.
+
+If the supplied code is incomplete or insufficient for a confident assessment, write:
+[insufficient context]
+
+Quote the relevant code fragment before explaining the issue.
+When a fix is needed, show the corrected code snippet.
+If the code is correct, say so briefly and clearly.
+Do not suggest aesthetic changes unless they affect correctness or reproducibility.
 ```
 
-The explicit constrained prompt used 2225 tokens. The shortest question alone used 2492 tokens, and the prompt containing `Preserve the intended analysis` used 2686 tokens.
+## Recommended user prompts
 
-This shows that a shorter user question does not necessarily produce a shorter total response. The system prompt, selected-code size, model reasoning, generated answer, and conversation/context settings can have a larger effect than the user question itself.
-
-The token count should therefore be interpreted together with response quality, not as a quality measure by itself.
-
-## Recommended prompt design
-
-The general anti-hallucination rules belong in the system prompt, because they should apply to every request. The user question should describe the task for the current request.
-
-Recommended system-prompt principles:
-
-- review only the code supplied in the current message;
-- do not invent missing objects, packages, functions, or context;
-- distinguish real correctness problems from optional style or performance suggestions;
-- state `[insufficient context]` when a conclusion depends on unseen code or data;
-- do not refer to line numbers unless line numbers are explicitly supplied;
-- quote the relevant code before proposing a correction.
-
-Recommended default user prompt:
+### Default review
 
 ```text
 Review this selected R code for real bugs and necessary corrections.
 ```
 
-For a narrower review focused on correctness:
+Use this as the normal default. It is short but tells the model to focus on correctness rather than broad stylistic commentary.
+
+### Strict correctness review
 
 ```text
 Check this selected R code for errors that would affect execution or the intended result. Ignore optional style and performance suggestions.
 ```
 
-For a general explanation rather than a strict review:
+Use this when false positives are a bigger concern than finding optional improvements.
+
+### General explanation
 
 ```text
 Explain what this selected R code does and mention any real problems.
 ```
 
+Use this when the goal is understanding rather than code review.
+
+### Minimal prompt
+
+```text
+Review this selected R code.
+```
+
+This is technically sufficient when the system prompt is strong, but it leaves the model more freedom and produced less consistent results in this comparison.
+
 ## Recommendation
 
-Use this as the normal user prompt:
+Use this combination:
+
+**System prompt:** the structured evidence-based prompt above.
+
+**Default user prompt:**
 
 ```text
 Review this selected R code for real bugs and necessary corrections.
 ```
 
-It is short but gives the model a clear objective. Keep the anti-invention and evidence requirements in the selected system prompt rather than repeating them in every question.
+Do not repeat all anti-hallucination rules in every user question. Keep those rules in the system prompt. Add task-specific instructions to the user prompt only when needed.
 
-For this particular test, the constrained prompt from Test 4 produced the most useful behavior, but it was still not perfect. If maximum faithfulness is more important than brevity, use the full constrained prompt from Test 4. If reducing repeated input is the priority, use the recommended short prompt and strengthen the `Geochemistry & Isotopes` system prompt.
+The phrase `Preserve the intended analysis` should not be used by default. It can be useful when a user specifically wants to avoid analytical changes, but in this test it produced a longer response without improving factual accuracy.
 
-Do not use `Preserve the intended analysis` as a default requirement unless the user specifically wants the model to avoid changing the analysis. In this test it did not improve factual accuracy and produced a longer response.
+## Limitations
 
-## Important implementation note
-
-The addin sends the selected code and the user question together in the user message. The system prompt is created separately and passed to LM Studio. Therefore, repeating the general review rules in the question is not technically necessary when those rules are already present in the system prompt.
-
-The addin's displayed token estimate is approximate. The code estimates selected-code tokens using byte length divided by four, while LM Studio reports its own total. These values should not be treated as identical measurements.
+The model can still generate unsupported claims even when the system prompt is explicit. Every response should therefore be checked against the exact code sent to the model. The addin's token estimate is approximate, while LM Studio reports its own token totals. Results may also vary with model version, context settings, and the exact selected ranges.
