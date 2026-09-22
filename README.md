@@ -327,6 +327,19 @@ The following settings can have a substantial effect on performance:
 
 The token estimate displayed by the addin is approximate. It is based on character length and is not an exact tokenizer count for every model.
 
+## Supported environment
+
+The project is currently developed and manually tested on:
+
+- Windows;
+- RStudio Desktop;
+- R 4.6.0;
+- LM Studio 0.4.16;
+- a local model served through the LM Studio OpenAI-compatible API.
+
+Other operating systems and RStudio environments may work, but they are not
+currently part of the tested configuration.
+
 ## Example script source
 
 Initial testing may use script and documentation associated with the following Zenodo record:
