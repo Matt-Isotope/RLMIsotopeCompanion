@@ -137,9 +137,13 @@ RLMIsotopeCompanion/
 ├── README.md
 ├── R/
 │   └── addin.R
-└── inst/
-    └── rstudio/
-        └── addins.dcf
+├── inst/
+│   └── rstudio/
+│       └── addins.dcf
+└── docs/
+    └── zenodo-example/
+        ├── Analysis.R
+        └── results.md
 ```
 
 The RStudio addin registration file must be located at:
@@ -272,10 +276,9 @@ The project is currently being tested with:
 - **RAM:** 32 GB;
 - **GPU:** NVIDIA GeForce RTX 3050 Laptop GPU with 4 GB VRAM;
 - **LM Studio:** 0.4.16 (Build 2);
-- **R:** latest or second-latest stable version at the time of testing;
-- **RStudio:** to be specified.
+- **R:** Version 4.6.0 (2026-04-24 ucrt);
+- **RStudio:** Version 2026.05.1+225 "Golden Wattle" Release
 
-The exact R and RStudio versions will be added after the testing environment is finalized.
 
 ## Tested language model
 
@@ -330,13 +333,13 @@ Initial testing may use data and documentation associated with the following Zen
 
 https://doi.org/10.5281/zenodo.17868174
 
-The dataset is distributed under the Creative Commons Attribution 4.0 International licence:
+The script is distributed under the Creative Commons Attribution 4.0 International licence:
 
 ```text
 CC BY 4.0
 ```
 
-Users should consult the original Zenodo record for the complete dataset description, citation requirements, authorship information, and licence conditions.
+Users should consult the original Zenodo record for the complete script description, citation requirements, authorship information, and licence conditions.
 
 The data may be used to test workflows involving:
 
@@ -354,7 +357,7 @@ The addin may assist with discussing analysis scripts and workflows associated w
 
 A possible testing workflow is:
 
-1. Download the dataset from Zenodo.
+1. Download the script from Zenodo.
 2. Read the data in R.
 3. Create or open an R script that analyses the data.
 4. Open the script in RStudio.
@@ -495,7 +498,7 @@ Try:
 - using the 4B model rather than a larger model;
 - reducing the context length;
 - selecting fewer lines of code;
-- avoiding large datasets in the prompt;
+- avoiding large scripts in the prompt;
 - reducing the expected response length;
 - adjusting GPU offloading;
 - reducing batch sizes if memory is limited;
@@ -596,7 +599,7 @@ For reproducible use, record:
 - the system prompt;
 - the version of this addin;
 - the input code;
-- the dataset version;
+- the script version;
 - the relevant Zenodo record.
 
 ## Repository
@@ -612,7 +615,7 @@ https://github.com/Matt-Isotope/RLMIsotopeCompanion
 If you use this addin in a project, publication, teaching material, or analysis workflow, please cite the repository once it has been published.
 
 
-When using the example Zenodo dataset, cite the original Zenodo record:
+When using the example Zenodo script, cite the original Zenodo record:
 
 ```text
 https://doi.org/10.5281/zenodo.17868174
@@ -628,7 +631,7 @@ The licences of external components must be checked separately, including:
 
 - LM Studio;
 - the selected language model;
-- datasets used with the addin;
+- scripts used with the addin;
 - external code;
 - examples;
 - documentation;
