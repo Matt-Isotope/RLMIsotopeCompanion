@@ -1,6 +1,6 @@
 Package: RLMIsotopeCompanion
 Title: R LM Isotope Companion
-Version: 0.1.0
+Version: 0.1.1
 Authors@R:
     person(
         "Matteo Giaccari",
