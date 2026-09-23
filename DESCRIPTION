@@ -7,7 +7,7 @@ Authors@R:
         email = "332051741+Matt-Isotope@users.noreply.github.com",
         role = c("aut", "cre")
     )
-Description: RStudio addin for querying local language models about R programming, statistics, archaeology, geochemistry, and isotope research.
+Description: RStudio addin for querying local language models through LM Studio about R programming, statistics, archaeology, geochemistry, and isotope research. It provides flat, domain-specific system prompts for concise code review and analysis assistance.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports:
