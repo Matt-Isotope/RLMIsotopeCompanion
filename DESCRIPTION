@@ -3,7 +3,7 @@ Title: R LM Isotope Companion
 Version: 0.1.0
 Authors@R:
     person(
-        "Matt-Isotope",
+        "Matteo Giaccari",
         email = "332051741+Matt-Isotope@users.noreply.github.com",
         role = c("aut", "cre")
     )
