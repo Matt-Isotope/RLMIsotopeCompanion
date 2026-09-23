@@ -56,6 +56,22 @@ For Qwen3-4B Q4_K_M on the tested local setup, short prompts were substantially 
 
 A shorter prompt, a lower maximum output length, and reviewing smaller code selections are recommended. A context length of 8,192 tokens was more practical than 16,384 for the available hardware.
 
+# Model evaluation and limitations
+
+This repository provides a local interface for sending selected R code to a local language model through LM Studio. The addin itself works as an interface, but the
+quality of the generated review depends on the selected model, prompt, context length, quantisation, and hardware.
+
+## Observations
+
+- Short code snippets were handled more reliably than long scripts.
+- Small local models sometimes reported valid R code as bugs, especially in `ggplot2` examples and when the selected context was incomplete.
+- Long responses could become slow and verbose, especially on 4B models.
+- Model performance is therefore highly dependent on prompt design and local configuration.
+
+## Conclusion
+
+The results should be interpreted as model-dependent observations rather than a formal benchmark. The addin is functional, but the quality of the code review depends on the model and local configuration.
+
 ## Conclusion
 
 The addin integration with LM Studio worked as intended during testing. The main limitation observed was the reliability and verbosity of small local models, especially on long or incomplete R scripts. Generated reviews should therefore be treated as suggestions and checked directly in R.
