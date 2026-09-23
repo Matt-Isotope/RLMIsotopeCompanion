@@ -634,6 +634,17 @@ https://doi.org/10.5281/zenodo.17868174
 
 Please also cite LM Studio and the selected language model where appropriate.
 
+## Package checks
+
+The package is automatically checked with `R CMD check` using GitHub Actions.
+
+The latest check completed successfully with:
+
+- **0 errors**
+- **0 warnings**
+
+See the latest [R-CMD-check workflow run](https://github.com/Matt-Isotope/RLMIsotopeCompanion/actions/workflows/R-CMD-check.yaml).
+
 ## Licence
 
 This project is released under the MIT License.
