@@ -2,6 +2,8 @@
 
 An RStudio addin for using local language models through LM Studio while working with R code.
 
+The package exposes the interactive interface in the RStudio Addins menu as `LM Studio R Assistant`.
+
 The project combines three main use cases:
 
 - general R programming assistance;
@@ -27,6 +29,14 @@ The addin can:
 - provide domain-oriented assistance for archaeological science, geochemistry, and isotope research;
 - estimate the approximate number of tokens in the selected code;
 - communicate with a locally running LM Studio server through its OpenAI-compatible API.
+
+## Documentation map
+
+- `docs/system-prompts.md` explains the rationale and structure of the built-in prompt modes.
+- `docs/zenodo-example/Analysis.R` provides a sample analysis workflow used for manual testing.
+- `docs/zenodo-example/results.md` summarises the model-evaluation observations.
+- `SECURITY.md` contains the project security and sensitive-data guidance.
+- `CONTRIBUTING.md` contains local setup and contribution steps.
 
 ## Important notice
 
@@ -113,10 +123,10 @@ devtools::install(
 
 After installation, restart RStudio.
 
-The addin should then be available from:
+The addin should then be available in the Addins menu as:
 
 ```text
-Addins → LM Studio R Assistant
+LM Studio R Assistant
 ```
 
 It can also be launched from R:
@@ -124,7 +134,6 @@ It can also be launched from R:
 ```r
 RLMIsotopeCompanion::R_LM_Isotope_Companion()
 ```
-
 
 ## Package structure
 
@@ -135,15 +144,21 @@ RLMIsotopeCompanion/
 ├── DESCRIPTION
 ├── NAMESPACE
 ├── README.md
+├── NEWS.md
+├── SECURITY.md
+├── CONTRIBUTING.md
 ├── R/
 │   └── addin.R
 ├── inst/
 │   └── rstudio/
 │       └── addins.dcf
-└── docs/
-    └── zenodo-example/
-        ├── Analysis.R
-        └── results.md
+├── docs/
+│   ├── system-prompts.md
+│   └── zenodo-example/
+│       ├── Analysis.R
+│       └── results.md
+├── LICENSE
+└── .github/
 ```
 
 The RStudio addin registration file must be located at:
@@ -178,8 +193,6 @@ httr::GET("http://localhost:1234/v1/models")
 
 A successful response should have HTTP status `200`.
 
-You can check the status code with:
-
 ```r
 httr::status_code(
   httr::GET("http://localhost:1234/v1/models")
@@ -189,7 +202,7 @@ httr::status_code(
 ## How to use the addin
 
 1. Open an R script in RStudio.
-2. Launch the addin from:
+2. Launch the addin from the Addins menu:
 
    ```text
    Addins → LM Studio R Assistant
@@ -200,14 +213,14 @@ httr::status_code(
 5. Choose a system prompt.
 6. Set the first line range.
 7. Optionally select code in the RStudio editor.
-8. Press:
+8. Click:
 
    ```text
    Grab editor selection
    ```
 
 9. Enter a question.
-10. Press:
+10. Click:
 
    ```text
    Ask LM Studio
@@ -216,6 +229,10 @@ httr::status_code(
 The addin sends the selected code and question to the local language model.
 
 ## System prompts
+
+For the design rationale behind the built-in prompts, see `docs/system-prompts.md`.
+
+The addin currently provides three prompt modes:
 
 ### Geochemistry & Isotopes
 
@@ -259,7 +276,7 @@ It asks the model to focus on:
 - statistical test selection;
 - assumptions;
 - transformations;
-- missing lines;
+- missing-data handling;
 - `ggplot2`;
 - tidyverse usage;
 - possible statistical errors;
@@ -267,71 +284,9 @@ It asks the model to focus on:
 
 The output of this prompt should be treated as a suggestion for further checking, not as statistical validation.
 
-## Tested environment
+## Tested environment and model notes
 
-The project is currently being tested with:
-
-- **Operating system:** Windows;
-- **CPU:** 11th Gen Intel Core i7-11800H @ 2.30 GHz;
-- **RAM:** 32 GB;
-- **GPU:** NVIDIA GeForce RTX 3050 Laptop GPU with 4 GB VRAM;
-- **LM Studio:** 0.4.16 (Build 2);
-- **R:** Version 4.6.0 (2026-04-24 ucrt);
-- **RStudio:** Version 2026.05.1+225 "Golden Wattle" Release
-
-
-## Tested language model
-
-The main model currently being tested is:
-
-```text
-qwen/qwen3-4b-2507
-qwen3.5-4b-claude-4.6-opus-reasoning-openclaw
-rhea-4b-coding-max-i1
-```
-
-This is a model in the approximately 4B parameter class.
-
-A larger 9B model was also considered during testing, but the 4B model is currently the preferred model for this hardware because it offers a better balance between responsiveness and available GPU memory.
-
-Model availability, model naming, quantisation, performance, and API behaviour may depend on the specific model files installed in LM Studio.
-
-No fixed token-per-second benchmark is reported because performance depends strongly on:
-
-- hardware;
-- model quantisation;
-- context length;
-- GPU offloading;
-- prompt length;
-- response length;
-- CPU and GPU memory;
-- LM Studio settings.
-
-## Hardware considerations
-
-The project was tested on a laptop with:
-
-- 32 GB of system RAM;
-- an NVIDIA RTX 3050 Laptop GPU with 4 GB of VRAM;
-- an Intel i7-11800H CPU.
-
-A 4B model is expected to be more practical than a larger model on this type of hardware, particularly for interactive code review.
-
-The following settings can have a substantial effect on performance:
-
-- context length;
-- GPU layer offloading;
-- CPU thread count;
-- evaluation batch size;
-- physical batch size;
-- model quantisation;
-- length of the code sent to the model.
-
-The token estimate displayed by the addin is approximate. It is based on character length and is not an exact tokenizer count for every model.
-
-## Supported environment
-
-The project is currently developed and manually tested on:
+The project is currently being tested on:
 
 - Windows;
 - RStudio Desktop;
@@ -339,8 +294,21 @@ The project is currently developed and manually tested on:
 - LM Studio 0.4.16;
 - a local model served through the LM Studio OpenAI-compatible API.
 
-Other operating systems and RStudio environments may work, but they are not
-currently part of the tested configuration.
+Hardware used during testing:
+
+- CPU: 11th Gen Intel Core i7-11800H @ 2.30 GHz;
+- RAM: 32 GB;
+- GPU: NVIDIA GeForce RTX 3050 Laptop GPU with 4 GB VRAM.
+
+The currently tested local model family is approximately 4B-class and includes:
+
+- `qwen/qwen3-4b-2507`;
+- `qwen3.5-4b-claude-4.6-opus-reasoning-openclaw`;
+- `rhea-4b-coding-max-i1`.
+
+Model availability, naming, quantisation, performance, and API behaviour may vary depending on the model files installed in LM Studio.
+
+The token estimate displayed by the addin is approximate and based on character length, not on a model-specific tokenizer count.
 
 ## Example script source
 
@@ -356,17 +324,7 @@ CC BY 4.0
 
 Users should consult the original Zenodo record for the complete script description, citation requirements, authorship information, and licence conditions.
 
-The script may be used to test workflows involving:
-
-- data import;
-- data cleaning;
-- data transformation;
-- visualisation;
-- statistical analysis;
-- archaeological interpretation;
-- geochemical and isotope-related analysis.
-
-The addin may assist with discussing analysis scripts and workflows associated with the dataset. It does not independently validate the dataset, the original research, or any scientific conclusion.
+The addin may assist with discussing analysis scripts and workflows associated with the dataset. It does not independently validate the dataset, the original research, or any scientific conclusions.
 
 ## Suggested Zenodo testing workflow
 
@@ -379,13 +337,7 @@ A possible testing workflow is:
 5. Launch the addin.
 6. Select a small range of relevant code.
 7. Ask the model to explain or review the code.
-8. Compare the response with:
-   - the Zenodo metadata;
-   - the original documentation;
-   - the data structure;
-   - the published research context;
-   - the expected statistical assumptions;
-   - independent R checks.
+8. Compare the response with the Zenodo metadata, the original documentation, the data structure, the published research context, the expected statistical assumptions, and independent R checks.
 
 Example questions include:
 
@@ -444,22 +396,6 @@ Do not send:
 - proprietary code;
 - data covered by restrictions that do not allow local-model processing.
 
-## What this tool is not
-
-R-LM-Isotope-Companion is not:
-
-- an automated statistical validation system;
-- a replacement for a statistician;
-- a replacement for an archaeologist or isotope specialist;
-- a substitute for dataset documentation;
-- a guarantee that R code is correct;
-- a tool for automatically establishing archaeological or biological conclusions;
-- a confidential-data processing system by default;
-- a replacement for peer review;
-- a reproducibility or provenance system.
-
-A language model may produce a confident answer that is incorrect. Users are responsible for checking generated code, statistical assumptions, scientific interpretations, and any claims derived from the output.
-
 ## Known limitations
 
 - The addin currently expects LM Studio at `localhost:1234`.
@@ -510,7 +446,7 @@ Check:
 
 Try:
 
-- using the 4B model rather than a larger model;
+- using a 4B model rather than a larger model;
 - reducing the context length;
 - selecting fewer lines of code;
 - avoiding large scripts in the prompt;
@@ -546,7 +482,7 @@ If R reports that Rtools is required, install the version compatible with the in
 https://cran.r-project.org/bin/windows/Rtools/
 ```
 
-The need for Rtools depends on how the package and its dependencies are installed. The package may install successfully without Rtools if no compilation is required, but Rtools may be needed for other packages or future development tasks.
+The need for Rtools depends on how the package and its dependencies are installed. The package may install successfully without Rtools if no compilation is required, but Rtools may be needed when dependencies require compilation.
 
 ## Development status
 
@@ -593,7 +529,7 @@ The project author remains responsible for:
 - licensing decisions;
 - published results.
 
-AI-generated suggestions were reviewed and adapted, but they may still contain errors. The use of AI assistance does not imply that the code, analysis, or scientific interpretation has been independently validated by an AI system.
+AI-generated suggestions were reviewed and adapted, but they may still contain errors. The use of AI assistance does not imply that the code, analysis, or scientific interpretation has been independently verified.
 
 The code is still being reviewed, adapted, and tested. The current release should therefore be considered experimental.
 
@@ -627,7 +563,6 @@ https://github.com/Matt-Isotope/RLMIsotopeCompanion
 
 If you use this addin in a project, publication, teaching material, or analysis workflow, please cite the repository once it has been published.
 
-
 When using the example Zenodo script, cite the original Zenodo record:
 
 ```text
@@ -642,8 +577,8 @@ The package is automatically checked with `R CMD check` using GitHub Actions.
 
 The latest check completed successfully with:
 
-- **0 errors**
-- **0 warnings**
+- 0 errors;
+- 0 warnings.
 
 See the latest [R-CMD-check workflow run](https://github.com/Matt-Isotope/RLMIsotopeCompanion/actions/workflows/R-CMD-check.yaml).
 
