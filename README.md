@@ -34,7 +34,7 @@ The addin can:
 
 The addin provides a compact RStudio gadget with a file selector, model/prompt controls, range selection, question input, and response panel.
 
-![LM Studio R Assistant UI](https://raw.githubusercontent.com/Matt-Isotope/RLMIsotopeCompanion/main/docs/images/ui-overview.png)
+![LM Studio R Assistant UI](docs/images/ui-overview.svg)
 
 ## Documentation map
 
