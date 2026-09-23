@@ -30,6 +30,12 @@ The addin can:
 - estimate the approximate number of tokens in the selected code;
 - communicate with a locally running LM Studio server through its OpenAI-compatible API.
 
+## Example UI
+
+The addin provides a compact RStudio gadget with a file selector, model/prompt controls, range selection, question input, and response panel.
+
+![LM Studio R Assistant UI](https://raw.githubusercontent.com/Matt-Isotope/RLMIsotopeCompanion/main/docs/images/ui-overview.png)
+
 ## Documentation map
 
 - `docs/system-prompts.md` explains the rationale and structure of the built-in prompt modes.
