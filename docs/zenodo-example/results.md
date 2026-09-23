@@ -72,8 +72,6 @@ quality of the generated review depends on the selected model, prompt, context l
 
 The results should be interpreted as model-dependent observations rather than a formal benchmark. The addin is functional, but the quality of the code review depends on the model and local configuration.
 
-## Conclusion
-
 The addin integration with LM Studio worked as intended during testing. The main limitation observed was the reliability and verbosity of small local models, especially on long or incomplete R scripts. Generated reviews should therefore be treated as suggestions and checked directly in R.
 
 The results are model-dependent and should not be interpreted as proof that the addin can detect all R errors or that a particular model is universally superior.
