@@ -285,7 +285,9 @@ The project is currently being tested with:
 The main model currently being tested is:
 
 ```text
+qwen/qwen3-4b-2507
 qwen3.5-4b-claude-4.6-opus-reasoning-openclaw
+rhea-4b-coding-max-i1
 ```
 
 This is a model in the approximately 4B parameter class.
