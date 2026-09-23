@@ -602,4 +602,16 @@ The licences of external components must be checked separately, including:
 - documentation;
 - third-party dependencies.
 
+## Archived release
+
+Version `v0.1.1` is archived on Zenodo and is available through the following DOI:
+
+[![DOI](https://doi.org/10.5281/zenodo.22915644)](https://doi.org/10.5281/zenodo.22915644)
+
+> Giaccari, M. (2026). *Matt-Isotope/RLMIsotopeCompanion: RLMIsotopeCompanion v0.1.1* (Version v0.1.1) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.22915644
+
+The source code and development history are available on GitHub:
+
+[https://github.com/Matt-Isotope/RLMIsotopeCompanion](https://github.com/Matt-Isotope/RLMIsotopeCompanion)
+
 The Zenodo script used for initial testing is associated with the Creative Commons Attribution 4.0 International licence, subject to the terms of the original Zenodo record.
